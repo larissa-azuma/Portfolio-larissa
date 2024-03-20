@@ -1,4 +1,4 @@
-import { Router, query } from "express";
+import { Router } from "express";
 import db from "../db/connection.js";
 import { ObjectId } from "mongodb";
 
@@ -11,7 +11,7 @@ router.get("/", async (req, res) => {
   res.send(results).status(200);
 });
 
-// Endpoint for adding a single project by id
+// Endpoint for adding a single projects by id
 router.get("/:id", async (req, res) => {
   let query = { _id: new ObjectId(req.params.id) };
   let result = await PROJECTS_COLLECTION.findOne(query);
@@ -19,21 +19,21 @@ router.get("/:id", async (req, res) => {
   !result ? res.send("Not found!").status(404) : res.send(result).status(201);
 });
 
-// Endpoint for adding a project 
+// Endpoint for adding a single projects
 router.post("/", async (req, res) => {
   try {
-    let newProject = {
-      Project: req.body.project,
+    let newProjects = {
+      project: req.body.project,
       description: req.body.description,
     };
-    let result = await PROJECTS_COLLECTION.insertOne(newProject);
+    let result = await PROJECTS_COLLECTION.insertOne(newProjects);
     res.send(result).status();
   } catch (error) {
     console.error(error);
   }
 });
 
-// Endpoint for updating a project by the id
+// Endpoint for updating a posts by the id
 router.patch("/id", async (req, res) => {
   try {
     const query = { _id: new ObjectId(req.params.id) };
@@ -41,24 +41,24 @@ router.patch("/id", async (req, res) => {
       $set: {
         project: req.body.project,
         description: req.body.description,
-        
       },
     };
     let result = await PROJECTS_COLLECTION.updateOne(query, updates);
-    res.send(result).status(200)
+    res.send(result).status(200);
   } catch (error) {}
   console.error(error);
 });
 
-//Endpoint for deleting a project by id
-router.delete('/id',async (req,res)=> {
-    try{
-        const query ={_id: new ObjectId (req.params.id)};
-        let result =await PROJECTS_COLLECTION.deleteOne(query);
-        res.send(result).status(200);
+
+// Endpoint for deleting a project by id
+router.delete ('/id', async(req, res) => {
+    try {
+        const query ={_id: new ObjectId(req.params.id)}
+        let res = await PROJECTS_COLLECTION.deleteOne(query);
+
     } catch (error) {
         console.error(error);
+        
     }
-});
-
+})
 export default router;
